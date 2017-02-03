@@ -193,8 +193,8 @@ var App = function() {
 				provider.get(target, function(data) {
 					data.map(function(m) {
 						if (m !== null) {
-							graph.addRect(m.value);
-							graph.setOverview(m.value);
+							graph.addRect(m.value * 8);
+							graph.setOverview(m.value * 8);
 						}
 					});
 				});

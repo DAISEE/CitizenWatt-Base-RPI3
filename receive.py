@@ -1,38 +1,32 @@
 #!/usr/bin/env python3
 
-from RF24 import *
+import sys
+import time
+from pySmartPlugSmpB16 import SmartPlug, btle
 
+addr = "" #to update
+
+# connect to the plug (BLE connect)
+try:
+    plug = SmartPlug(addr)
+except btle.BTLEException as err:
+    sys.exit('error when connect to %s (code %d)' % (addr, err.code))
 
 # file storing data
 filename = '/tmp/sensor.log'
 
-# TODO : read from config file 
-pipes = [0xE7E7E7E7E7, 0xE056D446D0]
-
-radio = RF24(22, 0)
-radio.begin()
-radio.setRetries(15, 15)
-radio.setDataRate(RF24_250KBPS)
-radio.setAutoAck(1)
-radio.setPALevel(RF24_PA_MIN)
-radio.setCRCLength(RF24_CRC_8)
-radio.openReadingPipe(1, pipes[1])
-
-# for debug
-# radio.printDetails()
-
 while True:
-    radio.startListening()
-    pipe = [0]
-    while not radio.available():
-        continue
-    size = radio.getDynamicPayloadSize()
-    receive_payload = radio.read(size)
-    
+
+    try:
+        (state, power, voltage) = plug.status_request()
+    except btle.BTLEException as err:
+        sys.exit('error when requesting stat to plug %s (code %d)' % (addr, err.code))
+    print('plug power   = %d W' % power)
+
     # for debug
     # print(size, ''.join('{:02x}'.format(x) for x in receive_payload))
     # print(receive_payload)
     # print('')
-    FileTemp = open(filename, 'wb')
-    FileTemp.write(receive_payload)
+    FileTemp = open(filename, 'w')
+    FileTemp.write(str(power) + ',' + str(time.time()))
     FileTemp.close()
