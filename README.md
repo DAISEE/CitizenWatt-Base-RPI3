@@ -14,3 +14,6 @@ documentation : http://tmrh20.github.io/RF24/RPi.html
 
 * Remplacement du programme **receive.cpp** par **receive.py**  
 impact : utilisation de la [version PINE64+ du **process.py**](https://github.com/DAISEE/CitizenWatt-Base-PINE64/blob/master/process.py) (écriture des data dans un fichier log)  
+
+## Version pour smartplug
+La branche '[smartplug](https://github.com/DAISEE/CitizenWatt-Base-RPI3/tree/smartplug)' comprend les adaptations pour fonctionner avec le [Smartplug Bluetooth Awox SMP-B16-FR](https://github.com/sourceperl/smartplugctl).  
