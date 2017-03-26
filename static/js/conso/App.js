@@ -193,8 +193,9 @@ var App = function() {
 				provider.get(target, function(data) {
 					data.map(function(m) {
 						if (m !== null) {
-							graph.addRect(m.value * Config.timestep);
-							graph.setOverview(m.value * Config.timestep);
+						    /* suppression de la multiplication par Config.timestep */
+							graph.addRect(m.value);
+							graph.setOverview(m.value);
 						}
 					});
 				});

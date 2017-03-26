@@ -30,3 +30,6 @@ while True:
     FileTemp = open(filename, 'w')
     FileTemp.write(str(power) + ',' + str(time.time()))
     FileTemp.close()
+
+    # correspond au Config.timestep par défaut (soit 8 sec)
+    time.sleep(8)
