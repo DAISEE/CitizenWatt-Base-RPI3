@@ -1,16 +1,11 @@
 #!/usr/bin/env python3
 
 import datetime
-import json
-import os
-import stat
-import struct
 import sys
 import time
 
 from libcitizenwatt import database
 from libcitizenwatt import tools
-from Crypto.Cipher import AES
 from libcitizenwatt.config import Config
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -66,52 +61,49 @@ while not sensor or not sensor.aes_key:
     time.sleep(1)
     sensor = get_cw_sensor()
 
-key = json.loads(sensor.aes_key)
-key = struct.pack("<16B", *key)
-
 try:
     with open(filename):
         pass
 except FileNotFoundError:
     sys.exit("Unable to open file " + filename + ".")
 
+lastTimer = 0
+
 try:
-    with open(config.get(filename), 'rb'):
+    with open(config.get(filename), 'r'):
         while True:
-            FileTemp = open(filename, 'rb')
-            measure = FileTemp.read(16)
-            print("New encrypted packet:" + str(measure))
-
-            decryptor = AES.new(key, AES.MODE_ECB)
-            measure = decryptor.decrypt(measure)
-            measure = struct.unpack("<HHHLlH", measure)
-            print("New incoming measure:" + str(measure))
-
-            power = measure[0]
-            voltage = measure[1]
-            battery = measure[2]
-            timer = measure[3]
-
-            if (sensor.last_timer and sensor.last_timer > 0 and
-                        sensor.last_timer < 4233600000 and
-                        timer < sensor.last_timer):
-                tools.warning("Invalid timer in the last packet, skipping it")
+            FileTemp = open(filename, 'r')
+            measure = FileTemp.read()
+            measure = measure.split(',')
+            try:
+                power = measure[0]
+                timer = measure[1]
+            except Exception as e:
+                #print("Process.py - ERROR : Incorrect data > measure = " + str(measure))
+                pass
             else:
-                try:
-                    db = create_session()
-                    measure_db = database.Measures(sensor_id=sensor.id,
-                                               value=power,
-                                               timestamp=datetime.datetime.now().timestamp(),
-                                               night_rate=get_rate_type(db))
-                    db.add(measure_db)
-                    sensor.last_timer = timer
-                    (db.query(database.Sensor)
-                     .filter_by(name="CitizenWatt")
-                     .update({"last_timer": sensor.last_timer}))
-                    db.commit()
-                except Exception as e:
-                    print("DB commit failed : " + e)
+                if timer == lastTimer:
+                    pass
                 else:
-                    print("Saved successfully.")
+                    lastTimer = timer
+                    #print("Process.py - Measure:" + str(measure))
+                    try:
+                        db = create_session()
+                        #print("power:" + power)
+                        measure_db = database.Measures(sensor_id=sensor.id,
+                                                       value=power,
+                                                       timestamp=datetime.datetime.now().timestamp(),
+                                                       night_rate=get_rate_type(db))
+                        db.add(measure_db)
+                        sensor.last_timer = float(timer)
+                        (db.query(database.Sensor)
+                         .filter_by(name="CitizenWatt")
+                         .update({"last_timer": sensor.last_timer}))
+                        db.commit()
+                    except Exception as e:
+                        print("ERROR : DB commit failed")
+                    else:
+                        print("Saved successfully.")
+
 except KeyboardInterrupt:
     pass
