@@ -15,5 +15,9 @@ documentation : http://tmrh20.github.io/RF24/RPi.html
 * Remplacement du programme **receive.cpp** par **receive.py**  
 impact : utilisation de la [version PINE64+ du **process.py**](https://github.com/DAISEE/CitizenWatt-Base-PINE64/blob/master/process.py) (écriture des data dans un fichier log)  
 
+## Version pour capteur de courant de type 'invasif'
+La branche '[ina219](https://github.com/DAISEE/CitizenWatt-Base-RPI3/tree/smartplug)' comprend les adaptations pour fonctionner avec le capteur de courant [INA219](https://www.adafruit.com/product/904), connecté directement au Raspberry Pi (interface I²C).  
+Elle s'appuie sur la librairie [chrisb2/pi_ina219](https://github.com/chrisb2/pi_ina219).
+
 ## Version pour smartplug
 La branche '[smartplug](https://github.com/DAISEE/CitizenWatt-Base-RPI3/tree/smartplug)' comprend les adaptations pour fonctionner avec le [Smartplug Bluetooth Awox SMP-B16-FR](https://github.com/sourceperl/smartplugctl).  
