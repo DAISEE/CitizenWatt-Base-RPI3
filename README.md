@@ -16,8 +16,10 @@ documentation : http://tmrh20.github.io/RF24/RPi.html
 impact : utilisation de la [version PINE64+ du **process.py**](https://github.com/DAISEE/CitizenWatt-Base-PINE64/blob/master/process.py) (écriture des data dans un fichier log)  
 
 ## Version pour capteur de courant de type 'invasif'
-La branche '[ina219](https://github.com/DAISEE/CitizenWatt-Base-RPI3/tree/smartplug)' comprend les adaptations pour fonctionner avec le capteur de courant [INA219](https://www.adafruit.com/product/904), connecté directement au Raspberry Pi (interface I²C).  
+* La branche '[ina219](https://github.com/DAISEE/CitizenWatt-Base-RPI3/tree/ina219)' comprend les adaptations pour fonctionner avec le capteur de courant [INA219](https://www.adafruit.com/product/904), connecté directement au Raspberry Pi (interface I²C).  
 Elle s'appuie sur la librairie [chrisb2/pi_ina219](https://github.com/chrisb2/pi_ina219)
+* La branche '[acs217](https://github.com/DAISEE/CitizenWatt-Base-RPI3/tree/acs217)' comprend les adaptations pour fonctionner avec le capteur de courant de type [ACS712](http://www.allegromicro.com/en/Products/Current-Sensor-ICs/Zero-To-Fifty-Amp-Integrated-Conductor-Sensor-ICs/ACS712.aspx), connecté via un Arduino au Raspberry Pi (port serial).  
+Le code utilisé par l'Arduino est adapté du [code proposé](http://wiki.mchobby.be/index.php?title=SENSEUR-COURANT-ACS712#Code) par MCHobby.
 
 ## Version pour smartplug
 La branche '[smartplug](https://github.com/DAISEE/CitizenWatt-Base-RPI3/tree/smartplug)' comprend les adaptations pour fonctionner avec le [Smartplug Bluetooth Awox SMP-B16-FR](https://github.com/sourceperl/smartplugctl).  
