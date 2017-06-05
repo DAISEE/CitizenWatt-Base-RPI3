@@ -75,11 +75,12 @@ try:
             FileTemp = open(filename, 'r')
             measure = FileTemp.read()
             measure = measure.split(',')
+            data = measure[0].split('|')
             try:
-                power = measure[0]
+                power = data[1]
                 timer = measure[1]
             except Exception as e:
-                #print("Process.py - ERROR : Incorrect data > measure = " + str(measure))
+                print("Process.py - ERROR : Incorrect data > measure = " + str(measure))
                 pass
             else:
                 if timer == lastTimer:
